@@ -1,0 +1,13 @@
+<resources>
+    <string name="app_name">CipherSharedPreferences</string>
+    <string name="key">Key</string>
+    <string name="value">Value</string>
+    <string name="apply">Apply</string>
+    <string name="enter_key">Enter key</string>
+    <string name="key_requirments_message">16 chars key required</string>
+    <string name="bad_key">Bad key</string>
+    <string name="add">Add</string>
+    <string name="add_value_pair">Add Value Pair</string>
+    <string name="empty_key">Empty key</string>
+    <string name="key_exists">Key already exists</string>
+</resources>
