@@ -1,6 +1,30 @@
 apply plugin: 'com.android.library'
 apply plugin: 'kotlin-android'
 
+ext {
+    bintrayRepo = 'maven'
+    bintrayName = 'sharedprefs'
+
+    publishedGroupId = published_group_id
+    artifact = 'sharedprefs'
+    libraryName = library_name
+
+    libraryDescription = 'Implements layer with encryption for SharedPreferences'
+
+    siteUrl = url
+    gitUrl = url
+
+    libraryVersion = version_name
+
+    developerId = 'ufkoku'
+    developerName = 'Sizyntsev Mykyta'
+    developerEmail = 'ufkoku@gmail.com'
+
+    licenseName = 'The Apache Software License, Version 2.0'
+    licenseUrl = 'http://www.apache.org/licenses/LICENSE-2.0.txt'
+    allLicenses = ["Apache-2.0"]
+}
+
 android {
     compileSdkVersion Integer.parseInt(compile_sdk_version)
     buildToolsVersion build_tools_version
@@ -40,3 +64,6 @@ dependencies {
     androidTestCompile project (":caches")
     androidTestCompile project (":ciphers")
 }
+
+apply from: '../installv1.gradle'
+apply from: '../bintrayv1.gradle'

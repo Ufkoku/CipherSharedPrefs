@@ -1,6 +1,30 @@
 apply plugin: 'com.android.library'
 apply plugin: 'kotlin-android'
 
+ext {
+    bintrayRepo = 'maven'
+    bintrayName = 'sharedprefs_ciphers'
+
+    publishedGroupId = published_group_id
+    artifact = 'ciphers'
+    libraryName = library_name
+
+    libraryDescription = 'Implementations of ciphers for CipherSharedPrefs'
+
+    siteUrl = url
+    gitUrl = url
+
+    libraryVersion = version_name
+
+    developerId = 'ufkoku'
+    developerName = 'Sizyntsev Mykyta'
+    developerEmail = 'ufkoku@gmail.com'
+
+    licenseName = 'The Apache Software License, Version 2.0'
+    licenseUrl = 'http://www.apache.org/licenses/LICENSE-2.0.txt'
+    allLicenses = ["Apache-2.0"]
+}
+
 android {
     compileSdkVersion Integer.parseInt(compile_sdk_version)
     buildToolsVersion build_tools_version
@@ -37,3 +61,6 @@ dependencies {
     androidTestCompile 'com.android.support.test:runner:' + instrumentation_test_version
     androidTestCompile 'com.android.support.test:rules:' + instrumentation_test_version
 }
+
+apply from: '../installv1.gradle'
+apply from: '../bintrayv1.gradle'
