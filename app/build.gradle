@@ -34,7 +34,7 @@ repositories {
 
 dependencies {
     compile fileTree(dir: 'libs', include: ['*.jar'])
-    compile project(":ciphersharedprefs")
+    compile project(":sharedprefs")
     compile project(":ciphers")
     compile project(":caches")
 

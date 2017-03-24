@@ -1,1 +1,1 @@
-include ':app', ':ciphersharedprefs', ':caches', ':api', ':ciphers'
+include ':app', ':sharedprefs', ':caches', ':api', ':ciphers'

@@ -12,7 +12,7 @@
             <option value="$PROJECT_DIR$/app" />
             <option value="$PROJECT_DIR$/caches" />
             <option value="$PROJECT_DIR$/ciphers" />
-            <option value="$PROJECT_DIR$/ciphersharedprefs" />
+            <option value="$PROJECT_DIR$/sharedprefs" />
           </set>
         </option>
         <option name="resolveModulePerSourceSet" value="false" />

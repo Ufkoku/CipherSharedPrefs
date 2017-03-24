@@ -7,7 +7,7 @@
       <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
       <module fileurl="file://$PROJECT_DIR$/caches/caches.iml" filepath="$PROJECT_DIR$/caches/caches.iml" />
       <module fileurl="file://$PROJECT_DIR$/ciphers/ciphers.iml" filepath="$PROJECT_DIR$/ciphers/ciphers.iml" />
-      <module fileurl="file://$PROJECT_DIR$/ciphersharedprefs/ciphersharedprefs.iml" filepath="$PROJECT_DIR$/ciphersharedprefs/ciphersharedprefs.iml" />
+      <module fileurl="file://$PROJECT_DIR$/sharedprefs/sharedprefs.iml" filepath="$PROJECT_DIR$/sharedprefs/sharedprefs.iml" />
     </modules>
   </component>
 </project>
