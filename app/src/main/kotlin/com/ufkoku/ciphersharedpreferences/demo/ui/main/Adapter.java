@@ -1,4 +1,4 @@
-package com.ufkoku.ciphersharedpreferences.demo.ui;
+package com.ufkoku.ciphersharedpreferences.demo.ui.main;
 
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -77,9 +77,9 @@ public class Adapter extends RecyclerView.Adapter<Adapter.ItemViewHolder> {
         public ItemViewHolder(View itemView) {
             super(itemView);
 
-            tvKey = (TextView) itemView.findViewById(R.id.key);
-            tvValue = (TextView) itemView.findViewById(R.id.value);
-            tvEncryptedValue = (TextView) itemView.findViewById(R.id.valueEncrypted);
+            tvKey = itemView.findViewById(R.id.key);
+            tvValue = itemView.findViewById(R.id.value);
+            tvEncryptedValue = itemView.findViewById(R.id.valueEncrypted);
 
             itemView.findViewById(R.id.deleteButton).setOnClickListener(v -> {
                 if (listener != null && binded != null) {

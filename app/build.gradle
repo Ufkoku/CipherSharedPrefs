@@ -54,6 +54,8 @@ dependencies {
     def mvp_ver = "4.0.7"
     api "com.ufkoku.mvp:mvp:$mvp_ver"
     api "com.ufkoku.mvp:mvp_rx2_presenter:$mvp_ver"
+    implementation("com.ufkoku.mvp:mvp_autosavable_annotation:$mvp_ver")
+    kapt("com.ufkoku.mvp:mvp_autosavable:$mvp_ver")
 
     implementation 'com.google.dagger:dagger:2.16'
     kapt 'com.google.dagger:dagger-compiler:2.16'
