@@ -455,9 +455,16 @@ public class CipherSharedPreferencesTest {
 
         preferences.edit().putStringSet(KEY_1, value).commit();
 
-        String encrypted = createDefaultPreferences().getString(KEY_1, null);
+        Set<String> encrypted = createDefaultPreferences().getStringSet(KEY_1, null);
         Assert.assertNotNull(encrypted);
-        Assert.assertEquals(new JSONArray(value).toString(), cipher.decrypt(encrypted));
+        Assert.assertNotEquals(value, encrypted);
+
+        Set<String> decrypted = new HashSet<>(3);
+        for (String str : encrypted) {
+            decrypted.add(cipher.decrypt(str));
+        }
+
+        Assert.assertEquals(value, decrypted);
     }
 
     @Test
@@ -499,9 +506,16 @@ public class CipherSharedPreferencesTest {
 
         preferences.edit().putStringSet(KEY_1, value).commit();
 
-        String encrypted = createDefaultPreferences().getString(KEY_1, null);
+        Set<String> encrypted = createDefaultPreferences().getStringSet(KEY_1, null);
         Assert.assertNotNull(encrypted);
-        Assert.assertEquals(new JSONArray(value).toString(), cipher.decrypt(encrypted));
+        Assert.assertNotEquals(value, encrypted);
+
+        Set<String> decrypted = new HashSet<>(3);
+        for (String str : encrypted) {
+            decrypted.add(cipher.decrypt(str));
+        }
+
+        Assert.assertEquals(value, decrypted);
     }
 
     @Test

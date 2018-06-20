@@ -20,25 +20,12 @@ import android.content.SharedPreferences
 import com.ufkoku.cipher_sharedprefs.api.ICacheHolder
 import com.ufkoku.cipher_sharedprefs.api.ICipherHolder
 import com.ufkoku.cipher_sharedprefs.api.ITransformer
-import org.json.JSONArray
 
 open class CipherSharedPreferences(
-        delegate: SharedPreferences,
-        cipher: ICipherHolder,
-        cache: ICacheHolder?,
-        transformer: ITransformer?) : SharedPreferences {
-
-    protected val delegate: SharedPreferences
-    protected val cipher: ICipherHolder
-    protected val cache: ICacheHolder?
-    protected val transformer: ITransformer?
-
-    init {
-        this.delegate = delegate
-        this.cipher = cipher
-        this.cache = cache
-        this.transformer = transformer
-    }
+        protected val delegate: SharedPreferences,
+        protected val cipher: ICipherHolder,
+        protected val cache: ICacheHolder?,
+        protected val transformer: ITransformer?) : SharedPreferences {
 
     constructor(delegate: SharedPreferences, cipher: ICipherHolder) : this(delegate, cipher, null, null)
 
@@ -53,7 +40,7 @@ open class CipherSharedPreferences(
     override fun getBoolean(key: String, defValue: Boolean): Boolean {
         val value: Boolean
         if (cache != null && cache.containsKey(key)) {
-            value = cache.get(key) as Boolean
+            return cache.get(key) as Boolean
         } else {
             val fetchedVal = delegate.getString(key, null)
             value = if (fetchedVal != null) java.lang.Boolean.parseBoolean(cipher.decrypt(fetchedVal)) else defValue
@@ -125,18 +112,18 @@ open class CipherSharedPreferences(
     override fun getStringSet(key: String, defValues: Set<String>?): Set<String>? {
         val value: Set<String>?
         if (cache != null && cache.containsKey(key)) {
+            @Suppress("UNCHECKED_CAST")
             value = cache.get(key) as Set<String>?
         } else {
             if (delegate.contains(key)) {
-                val fetchedValue = delegate.getString(key, null)
+                val fetchedValue = delegate.getStringSet(key, null)
                 if (fetchedValue != null) {
-                    val decryptedJsonArray = JSONArray(cipher.decrypt(fetchedValue))
-                    if (decryptedJsonArray.length() == 0) {
+                    if (fetchedValue.isEmpty()) {
                         value = HashSet()
                     } else {
-                        value = HashSet(decryptedJsonArray.length())
-                        for (i in 0 until decryptedJsonArray.length()) {
-                            (value as MutableSet<String>).add(decryptedJsonArray.getString(i))
+                        value = HashSet(fetchedValue.size)
+                        for (str in fetchedValue) {
+                            value.add(cipher.decrypt(str))
                         }
                     }
                 } else {
@@ -157,6 +144,7 @@ open class CipherSharedPreferences(
     open fun <T> getObject(key: String, defValue: T?, clazz: Class<T>): T? {
         val value: T?
         if (cache != null && cache.containsKey(key)) {
+            @Suppress("UNCHECKED_CAST")
             value = cache.get(key) as T?
         } else {
             if (delegate.contains(key)) {
@@ -256,7 +244,23 @@ open class CipherSharedPreferences(
 
         override fun putStringSet(key: String, value: Set<String>?): SharedPreferences.Editor {
             putValuesTempCache?.put(key, value)
-            delegate.putString(key, if (value != null) cipher.encrypt(JSONArray(value).toString()) else null)
+
+            val setToSave: MutableSet<String>?
+
+            if (value != null) {
+                if (value.isEmpty()) {
+                    setToSave = HashSet()
+                } else {
+                    setToSave = HashSet(value.size)
+                    for (str in value) {
+                        setToSave.add(cipher.encrypt(str))
+                    }
+                }
+            } else {
+                setToSave = null
+            }
+
+            delegate.putStringSet(key, setToSave)
             return this
         }
 
