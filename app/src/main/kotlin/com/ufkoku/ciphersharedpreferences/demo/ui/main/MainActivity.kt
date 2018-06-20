@@ -16,8 +16,8 @@ import android.widget.Toast
 import com.ufkoku.ciphersharedpreferences.R
 import com.ufkoku.ciphersharedpreferences.demo.entity.PrefsEntry
 import com.ufkoku.ciphersharedpreferences.demo.ui.main.di.DaggerMainActivityComponent
-import com.ufkoku.ciphersharedpreferences.demo.ui.main.di.MainAcivityModule
 import com.ufkoku.ciphersharedpreferences.demo.ui.main.di.MainActivityComponent
+import com.ufkoku.ciphersharedpreferences.demo.ui.main.di.MainActivityModule
 import com.ufkoku.mvp.BaseMvpActivity
 
 import kotlinx.android.synthetic.main.activity_main.*
@@ -44,7 +44,7 @@ class MainActivity : BaseMvpActivity<IMainActivity, MainPresenter, MainViewState
 
     override fun onCreate(savedInstanceState: Bundle?) {
         mainActivityComponent = DaggerMainActivityComponent.builder()
-                .mainAcivityModule(MainAcivityModule())
+                .mainActivityModule(MainActivityModule())
                 .build()
 
         super.onCreate(savedInstanceState)
@@ -59,7 +59,7 @@ class MainActivity : BaseMvpActivity<IMainActivity, MainPresenter, MainViewState
 
         recyclerView.layoutManager = LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false)
         adapter = Adapter(layoutInflater)
-        adapter.setListener(this)
+        adapter.listener = this
         recyclerView!!.adapter = adapter
 
         findViewById<View>(R.id.fabAdd).setOnClickListener { fab -> onAddClicked() }
