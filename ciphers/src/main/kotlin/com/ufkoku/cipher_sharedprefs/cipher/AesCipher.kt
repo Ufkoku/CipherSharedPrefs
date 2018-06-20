@@ -154,7 +154,12 @@ class AesCipher(keyBytes: ByteArray, @AesCipherMode mode: String, ivBytes: ByteA
             if (mode == AesCipherMode.CTR) {
                 return String(decryptedBytes)
             } else {
-                return String(decryptedBytes.copyOfRange(0, decryptedBytes.size - decryptedBytes[decryptedBytes.size - 1].toInt()))
+                //if key is wrong it is impossible to remove padding and exception will be thrown
+                try {
+                    return String(decryptedBytes.copyOfRange(0, decryptedBytes.size - decryptedBytes[decryptedBytes.size - 1].toInt()))
+                } catch (ex: Exception) {
+                    return String(decryptedBytes)
+                }
             }
         }
     }
