@@ -1,16 +1,18 @@
 apply plugin: 'com.android.application'
-apply plugin: 'me.tatarka.retrolambda'
+apply plugin: 'kotlin-android'
+apply plugin: 'kotlin-android-extensions'
+apply plugin: 'kotlin-kapt'
 
 android {
-    compileSdkVersion 25
-    buildToolsVersion "25.0.2"
+    compileSdkVersion Integer.parseInt(compile_sdk_version)
+    buildToolsVersion build_tools_version
 
     defaultConfig {
         applicationId "com.ufkoku.ciphersharedpreferences"
-        minSdkVersion 9
-        targetSdkVersion 25
-        versionCode 1
-        versionName "1.0"
+        minSdkVersion Integer.parseInt(min_sdk_version)
+        targetSdkVersion Integer.parseInt(target_sdk_version)
+        versionCode Integer.parseInt(version_code)
+        versionName version_name
         vectorDrawables.useSupportLibrary = true
     }
 
@@ -26,6 +28,9 @@ android {
         targetCompatibility JavaVersion.VERSION_1_8
     }
 
+    sourceSets {
+        main.java.srcDirs += 'src/main/kotlin'
+    }
 }
 
 repositories {
@@ -33,20 +38,27 @@ repositories {
 }
 
 dependencies {
-    compile fileTree(dir: 'libs', include: ['*.jar'])
-    compile project(":sharedprefs")
-    compile project(":ciphers")
-    compile project(":caches")
+    implementation fileTree(dir: 'libs', include: ['*.jar'])
 
-    compile 'com.android.support:appcompat-v7:' + support_version
-    compile 'com.android.support:recyclerview-v7:' + support_version
-    compile 'com.android.support:cardview-v7:' + support_version
-    compile 'com.android.support:design:' + support_version
+    implementation "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
 
-    def mvp_ver = "1.0.2"
-    compile "com.ufkoku.mvp:mvp:$mvp_ver"
-    compile "com.ufkoku.mvp:mvp_rx_presenter:$mvp_ver"
+    implementation project(":sharedprefs")
+    implementation project(":ciphers")
+    implementation project(":caches")
 
-    compile 'com.google.dagger:dagger:2.10'
-    annotationProcessor 'com.google.dagger:dagger-compiler:2.10'
+    implementation 'com.android.support:appcompat-v7:' + support_version
+    implementation 'com.android.support:recyclerview-v7:' + support_version
+    implementation 'com.android.support:cardview-v7:' + support_version
+    implementation 'com.android.support:design:' + support_version
+
+    def mvp_ver = "4.0.7"
+    api "com.ufkoku.mvp:mvp:$mvp_ver"
+    api "com.ufkoku.mvp:mvp_rx2_presenter:$mvp_ver"
+
+    implementation 'com.google.dagger:dagger:2.16'
+    kapt 'com.google.dagger:dagger-compiler:2.16'
+}
+
+androidExtensions {
+    experimental = true
 }

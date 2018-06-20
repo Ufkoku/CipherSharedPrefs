@@ -2,7 +2,7 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/CipherSharedPreferences.iml" filepath="$PROJECT_DIR$/CipherSharedPreferences.iml" />
+      <module fileurl="file://$PROJECT_DIR$/CipherSharedPrefs.iml" filepath="$PROJECT_DIR$/CipherSharedPrefs.iml" />
       <module fileurl="file://$PROJECT_DIR$/api/api.iml" filepath="$PROJECT_DIR$/api/api.iml" />
       <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
       <module fileurl="file://$PROJECT_DIR$/caches/caches.iml" filepath="$PROJECT_DIR$/caches/caches.iml" />
