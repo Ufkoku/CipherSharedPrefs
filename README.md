@@ -1,6 +1,6 @@
 # CipherSharedPrefs
 
-![alt tag](https://img.shields.io/badge/version-1.0.0-brightgreen.svg)
+![alt tag](https://img.shields.io/badge/version-1.0.2-brightgreen.svg)
 
 CipherSharedPrefs implements SharedPreferences with encryption layer and some new features.
 
