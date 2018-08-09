@@ -24,73 +24,35 @@ import com.ufkoku.cipher_sharedprefs.api.ITransformer
 open class CipherSharedPreferences(
         protected val delegate: SharedPreferences,
         protected val cipher: ICipherHolder,
-        protected val cache: ICacheHolder?,
-        protected val transformer: ITransformer?) : SharedPreferences {
-
-    constructor(delegate: SharedPreferences, cipher: ICipherHolder) : this(delegate, cipher, null, null)
-
-    constructor(delegate: SharedPreferences, cipher: ICipherHolder, cache: ICacheHolder?) : this(delegate, cipher, cache, null)
-
-    constructor(delegate: SharedPreferences, cipher: ICipherHolder, transformer: ITransformer) : this(delegate, cipher, null, transformer)
+        protected val cache: ICacheHolder? = null,
+        protected val transformer: ITransformer? = null) : SharedPreferences {
 
     override fun edit(): CipherEditor {
         return CipherEditor(delegate.edit())
     }
 
     override fun getBoolean(key: String, defValue: Boolean): Boolean {
-        val value: Boolean
-        if (cache != null && cache.containsKey(key)) {
-            return cache.get(key) as Boolean
-        } else {
-            val fetchedVal = delegate.getString(key, null)
-            value = if (fetchedVal != null) java.lang.Boolean.parseBoolean(cipher.decrypt(fetchedVal)) else defValue
-            if (fetchedVal != null) {
-                cache?.put(key, value)
-            }
+        return getPrimitive(key, defValue) {
+            return it.toBoolean()
         }
-        return value
     }
 
     override fun getFloat(key: String, defValue: Float): Float {
-        val value: Float
-        if (cache != null && cache.containsKey(key)) {
-            value = cache.get(key) as Float
-        } else {
-            val fetchedVal = delegate.getString(key, null)
-            value = if (fetchedVal != null) java.lang.Float.parseFloat(cipher.decrypt(fetchedVal)) else defValue
-            if (fetchedVal != null) {
-                cache?.put(key, value)
-            }
+        return getPrimitive(key, defValue) {
+            return it.toFloat()
         }
-        return value
     }
 
     override fun getInt(key: String, defValue: Int): Int {
-        val value: Int
-        if (cache != null && cache.containsKey(key)) {
-            value = cache.get(key) as Int
-        } else {
-            val fetchedVal = delegate.getString(key, null)
-            value = if (fetchedVal != null) java.lang.Integer.parseInt(cipher.decrypt(fetchedVal)) else defValue
-            if (fetchedVal != null) {
-                cache?.put(key, value)
-            }
+        return getPrimitive(key, defValue) {
+            it.toInt()
         }
-        return value
     }
 
     override fun getLong(key: String, defValue: Long): Long {
-        val value: Long
-        if (cache != null && cache.containsKey(key)) {
-            value = cache.get(key) as Long
-        } else {
-            val fetchedVal = delegate.getString(key, null)
-            value = if (fetchedVal != null) java.lang.Long.parseLong(cipher.decrypt(fetchedVal)) else defValue
-            if (fetchedVal != null) {
-                cache?.put(key, value)
-            }
+        return getPrimitive(key, defValue) {
+            it.toLong()
         }
-        return value
     }
 
     override fun getString(key: String, defValue: String?): String? {
@@ -196,7 +158,21 @@ open class CipherSharedPreferences(
         delegate.unregisterOnSharedPreferenceChangeListener(onSharedPreferenceChangeListener)
     }
 
-    open inner class CipherEditor(val delegate: SharedPreferences.Editor) : SharedPreferences.Editor {
+    protected inline fun <reified T> getPrimitive(key: String, defValue: T, transform: (String) -> T): T {
+        val value: T
+        if (cache != null && cache.containsKey(key)) {
+            return cache.get(key) as T
+        } else {
+            val fetchedVal = delegate.getString(key, null)
+            value = if (fetchedVal != null) transform(cipher.decrypt(fetchedVal)) else defValue
+            if (fetchedVal != null) {
+                cache?.put(key, value)
+            }
+        }
+        return value
+    }
+
+    open inner class CipherEditor(private val delegate: SharedPreferences.Editor) : SharedPreferences.Editor {
 
         protected var clearAllOldRecords = false
         protected val removeValuesTempCache: MutableSet<String>?
