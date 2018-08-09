@@ -86,35 +86,38 @@ class AesCipher(keyBytes: ByteArray, @AesCipherMode mode: String, ivBytes: ByteA
                 cipher.init(Cipher.ENCRYPT_MODE, key)
             }
 
-            var sourceBytes = string.toByteArray()
-            val originalSourceSize: Int = sourceBytes.size
-            val completedBlocksSize: Int
-            val newSourceSize: Int
-            if (mode == AesCipherMode.CTR) {
-                //CTR not need full block
-                completedBlocksSize = originalSourceSize
-                newSourceSize = originalSourceSize
+            val sourceBytes = string.toByteArray()
+            val processedBytes: ByteArray
+            if (mode == AesCipherMode.CTR) { //CTR not need full block
+                processedBytes = sourceBytes
             } else {
-                completedBlocksSize = if (originalSourceSize % BLOCK_SIZE != 0) (BLOCK_SIZE * Math.ceil(sourceBytes.size.toDouble() / BLOCK_SIZE.toDouble())).toInt() else originalSourceSize
-                newSourceSize = 16 + completedBlocksSize
-                sourceBytes = Arrays.copyOf(sourceBytes, newSourceSize)
+                val completedBlocksSize = if (sourceBytes.size % BLOCK_SIZE != 0) {
+                    (BLOCK_SIZE * Math.ceil(sourceBytes.size.toDouble() / BLOCK_SIZE.toDouble())).toInt()
+                } else {
+                    sourceBytes.size
+                }
 
-                val salt = ByteArray(newSourceSize - 1 - originalSourceSize)
+                val processedSize = BLOCK_SIZE + completedBlocksSize
+                processedBytes = Arrays.copyOf(sourceBytes, processedSize)
+
+                val salt = ByteArray(processedSize - 1 - sourceBytes.size)
                 Random().nextBytes(salt) //avoid filling with 0 values
                 for ((i: Int, b: Byte) in salt.withIndex()) {
-                    sourceBytes[originalSourceSize + i] = b
+                    processedBytes[sourceBytes.size + i] = b
                 }
-                sourceBytes[newSourceSize - 1] = (newSourceSize - originalSourceSize).toByte()
+
+                processedBytes[processedSize - 1] = (processedSize - sourceBytes.size).toByte()
             }
 
-            val encryptedBytes: ByteArray = ByteArray(newSourceSize)
-            for (i in 0 until newSourceSize step BLOCK_SIZE) {
-                val toIndex = Math.min(newSourceSize, i + BLOCK_SIZE)
-                val encryptedBlockBytes = cipher.update(sourceBytes.copyOfRange(i, toIndex))
+            val encryptedBytes = ByteArray(processedBytes.size)
+            for (i in 0 until processedBytes.size step BLOCK_SIZE) {
+                val toIndex = Math.min(processedBytes.size, i + BLOCK_SIZE)
+                val encryptedBlockBytes = cipher.update(processedBytes.copyOfRange(i, toIndex))
                 for (j in 0 until encryptedBlockBytes.size) {
                     encryptedBytes[i + j] = encryptedBlockBytes[j]
                 }
             }
+
             cipher.doFinal() //reset cipher
 
             //save as latin-1 sting, it not modifies byte array
