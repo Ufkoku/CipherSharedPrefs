@@ -8,7 +8,6 @@ import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.Toolbar
 import android.text.InputFilter
 import android.util.TypedValue
-import android.view.View
 import android.widget.EditText
 import android.widget.FrameLayout
 import android.widget.Toast
@@ -62,7 +61,7 @@ class MainActivity : BaseMvpActivity<IMainActivity, MainPresenter, MainViewState
         adapter.setListener(this)
         recyclerView!!.adapter = adapter
 
-        findViewById<View>(R.id.fabAdd).setOnClickListener { fab -> onAddClicked() }
+        fabAdd.setOnClickListener { onAddClicked() }
     }
 
     override fun getMvpView(): IMainActivity {
@@ -141,7 +140,7 @@ class MainActivity : BaseMvpActivity<IMainActivity, MainPresenter, MainViewState
             val dialog = builder.create()
             dialog.show()
 
-            dialog.getButton(DialogInterface.BUTTON_POSITIVE).setOnClickListener { v ->
+            dialog.getButton(DialogInterface.BUTTON_POSITIVE).setOnClickListener { _ ->
                 val key = etKey.text.toString()
                 if (!key.isEmpty()) {
                     if (presenter.isKeyUnique(key)) {
@@ -177,7 +176,7 @@ class MainActivity : BaseMvpActivity<IMainActivity, MainPresenter, MainViewState
             dialog.setCanceledOnTouchOutside(false)
             dialog.show()
 
-            dialog.getButton(DialogInterface.BUTTON_POSITIVE).setOnClickListener { v ->
+            dialog.getButton(DialogInterface.BUTTON_POSITIVE).setOnClickListener { _ ->
                 if (editText.text.length == 16) {
                     val key = editText.text.toString()
                     viewState.key = key

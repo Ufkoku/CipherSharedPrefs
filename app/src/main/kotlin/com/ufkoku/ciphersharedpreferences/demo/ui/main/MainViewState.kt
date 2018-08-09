@@ -20,12 +20,12 @@ class MainViewState : IViewState<MainViewState.IViewStateHolder> {
     @DontSave
     val entries: MutableList<PrefsEntry> = ArrayList()
 
-    override fun restore(bundle: Bundle) {
-        MainViewStateSaver.restore(this, bundle)
+    override fun restore(inState: Bundle) {
+        MainViewStateSaver.restore(this, inState)
     }
 
-    override fun save(bundle: Bundle) {
-        MainViewStateSaver.save(this, bundle)
+    override fun save(out: Bundle) {
+        MainViewStateSaver.save(this, out)
     }
 
     override fun apply(view: IViewStateHolder) {
