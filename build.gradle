@@ -21,10 +21,10 @@ buildscript {
 
 allprojects {
     repositories {
-        maven { url 'https://dl.bintray.com/ufkoku/maven/' }
         google()
         jcenter()
         mavenCentral()
+        maven { url 'https://dl.bintray.com/ufkoku/maven/' }
     }
 }
 
