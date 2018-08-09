@@ -8,6 +8,7 @@ import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.Toolbar
 import android.text.InputFilter
 import android.util.TypedValue
+import android.view.View
 import android.widget.EditText
 import android.widget.FrameLayout
 import android.widget.Toast
@@ -15,8 +16,8 @@ import android.widget.Toast
 import com.ufkoku.ciphersharedpreferences.R
 import com.ufkoku.ciphersharedpreferences.demo.entity.PrefsEntry
 import com.ufkoku.ciphersharedpreferences.demo.ui.main.di.DaggerMainActivityComponent
-import com.ufkoku.ciphersharedpreferences.demo.ui.main.di.MainAcivityModule
 import com.ufkoku.ciphersharedpreferences.demo.ui.main.di.MainActivityComponent
+import com.ufkoku.ciphersharedpreferences.demo.ui.main.di.MainActivityModule
 import com.ufkoku.mvp.BaseMvpActivity
 
 import kotlinx.android.synthetic.main.activity_main.*
@@ -43,7 +44,7 @@ class MainActivity : BaseMvpActivity<IMainActivity, MainPresenter, MainViewState
 
     override fun onCreate(savedInstanceState: Bundle?) {
         mainActivityComponent = DaggerMainActivityComponent.builder()
-                .mainAcivityModule(MainAcivityModule())
+                .mainActivityModule(MainActivityModule())
                 .build()
 
         super.onCreate(savedInstanceState)
@@ -58,10 +59,10 @@ class MainActivity : BaseMvpActivity<IMainActivity, MainPresenter, MainViewState
 
         recyclerView.layoutManager = LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false)
         adapter = Adapter(layoutInflater)
-        adapter.setListener(this)
+        adapter.listener = this
         recyclerView!!.adapter = adapter
 
-        fabAdd.setOnClickListener { onAddClicked() }
+        findViewById<View>(R.id.fabAdd).setOnClickListener { fab -> onAddClicked() }
     }
 
     override fun getMvpView(): IMainActivity {
@@ -140,7 +141,7 @@ class MainActivity : BaseMvpActivity<IMainActivity, MainPresenter, MainViewState
             val dialog = builder.create()
             dialog.show()
 
-            dialog.getButton(DialogInterface.BUTTON_POSITIVE).setOnClickListener { _ ->
+            dialog.getButton(DialogInterface.BUTTON_POSITIVE).setOnClickListener { v ->
                 val key = etKey.text.toString()
                 if (!key.isEmpty()) {
                     if (presenter.isKeyUnique(key)) {
@@ -176,7 +177,7 @@ class MainActivity : BaseMvpActivity<IMainActivity, MainPresenter, MainViewState
             dialog.setCanceledOnTouchOutside(false)
             dialog.show()
 
-            dialog.getButton(DialogInterface.BUTTON_POSITIVE).setOnClickListener { _ ->
+            dialog.getButton(DialogInterface.BUTTON_POSITIVE).setOnClickListener { v ->
                 if (editText.text.length == 16) {
                     val key = editText.text.toString()
                     viewState.key = key
