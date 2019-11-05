@@ -1,3 +1,6 @@
+@Deprecated
+Use [androidx.EncryptedSharedPreferences](https://developer.android.com/reference/androidx/security/crypto/EncryptedSharedPreferences) instead
+
 # CipherSharedPrefs
 
 ![alt tag](https://img.shields.io/badge/version-1.0.3-brightgreen.svg)
